@@ -1,0 +1,40 @@
+FROM q1701/centos-ssh
+
+MAINTAINER q1701 <q1701@outlook.com>
+
+# Create a working directory.
+RUN mkdir /tmp/build
+ENV BUILD_TMP /tmp/build
+WORKDIR /tmp/build
+
+# Install the Git.
+RUN yum -y install git
+
+# Install the checkinstall.
+RUN git clone http://checkinstall.izto.org/checkinstall.git
+WORKDIR /tmp/build/checkinstall
+RUN yum -y install patch
+ADD patches/checkinstall.lib64.patch $BUILD_TMP/checkinstall.lib64.patch
+RUN patch -p1 -d . < ../checkinstall.lib64.patch
+ADD patches/checkinstall.confdir.patch $BUILD_TMP/checkinstall.confdir.patch
+RUN patch -p1 -d . < ../checkinstall.confdir.patch
+ADD patches/checkinstall.makepkg.patch $BUILD_TMP/checkinstall.makepkg.patch
+RUN patch -p1 -d . < ../checkinstall.makepkg.patch
+ADD patches/checkinstall.selinux.patch $BUILD_TMP/checkinstall.selinux.patch
+RUN patch -p1 -d . < ../checkinstall.selinux.patch
+ADD patches/checkinstall.rpm.patch $BUILD_TMP/checkinstall.rpm.patch
+RUN patch -p1 -d . < ../checkinstall.rpm.patch
+ADD patches/checkinstall.autoreqprov.patch $BUILD_TMP/checkinstall.autoreqprov.patch
+RUN patch -p1 -d . < ../checkinstall.autoreqprov.patch
+ADD patches/checkinstall.rc.patch $BUILD_TMP/checkinstall.rc.patch
+RUN patch -p1 -d . < ../checkinstall.rc.patch
+RUN yum -y install gcc gettext
+RUN make install
+RUN yum -y install file which tar rpm-build
+ENV HOME /root
+RUN mkdir -p $HOME/rpmbuild/SOURCES
+RUN (checkinstall --version|grep "^checkinstall"|sed "s/checkinstall \(.*\), .*/\1/" > $BUILD_TMP/checkinstall_version.txt)
+RUN checkinstall --type=rpm --pkgname=checkinstall --pkgversion=$(cat $BUILD_TMP/checkinstall_version.txt) --default
+RUN (echo "$HOME/rpmbuild/RPMS/x86_64/checkinstall-$(cat $BUILD_TMP/checkinstall_version.txt)-1.x86_64.rpm" > $BUILD_TMP/checkinstall_rpmpath.txt)
+RUN yum -y localinstall $(cat $BUILD_TMP/checkinstall_rpmpath.txt)
+WORKDIR /tmp/build
