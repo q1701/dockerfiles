@@ -1,0 +1,11 @@
+#!/bin/sh
+CONTAINER_NAME=${1:-centos-ssh}
+CONTAINER_IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' $CONTAINER_NAME)
+if [ -z "$CONTAINER_IP" ]; then
+    echo "Error: No ip address found for the container '$CONTAINER_NAME'.";
+    exit 1;
+fi
+REMOTE_USER=root
+SSH_OPTION="-oUserKnownHostsFile=/dev/null -oStrictHostKeyChecking=no"
+echo "Connecting... $REMOTE_USER@$CONTAINER_IP"
+ssh $SSH_OPTION $REMOTE_USER@$CONTAINER_IP

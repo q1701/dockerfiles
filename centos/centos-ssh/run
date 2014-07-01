@@ -1,0 +1,4 @@
+#!/bin/sh
+IMAGE_NAME="q1701/centos-ssh"
+CONTAINER_NAME="centos-ssh"
+docker run -d --name $CONTAINER_NAME $IMAGE_NAME
