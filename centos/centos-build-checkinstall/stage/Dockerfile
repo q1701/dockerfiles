@@ -5,9 +5,6 @@ MAINTAINER q1701 <q1701@outlook.com>
 # Update yum packages.
 RUN yum -y update
 
-# Reinstall locales.
-RUN yum -y reinstall glibc-common
-
 # Create a working directory.
 RUN mkdir /tmp/build
 ENV BUILD_TMP /tmp/build
