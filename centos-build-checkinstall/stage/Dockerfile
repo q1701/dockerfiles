@@ -51,16 +51,18 @@ ADD patches/checkinstall.rc.patch $BUILD_TMP/checkinstall.rc.patch
 RUN patch -p1 -d . < ../checkinstall.rc.patch
 
 ## meke install
-RUN yum -y install gcc gettext
+ENV BUILD_REQUIRES gcc,gettext
+RUN yum -y install $(echo $BUILD_REQUIRES|sed 's/,/ /g')
 RUN make install
 ## checkinstall itself
-RUN yum -y install file which tar rpm-build
+ENV REQUIRES gettext,file,which,tar,rpm-build
+RUN yum -y install $(echo $REQUIRES|sed 's/,/ /g')
 ENV HOME /root
 RUN mkdir -p $HOME/rpmbuild/SOURCES
 ### identify the version string ("x.y.z")
 RUN (checkinstall --version|grep "^checkinstall"|sed "s/checkinstall \(.*\), .*/\1/" > $BUILD_TMP/checkinstall_version.txt)
 ### build a rpm
-RUN checkinstall --type=rpm --pkgname=checkinstall --pkgversion=$(cat $BUILD_TMP/checkinstall_version.txt) --default
+RUN checkinstall --type=rpm --pkgname=checkinstall --pkgversion=$(cat $BUILD_TMP/checkinstall_version.txt) --default --requires=$REQUIRES
 ### save the full path of the rpm file into a file
 RUN (echo "$HOME/rpmbuild/RPMS/x86_64/checkinstall-$(cat $BUILD_TMP/checkinstall_version.txt)-1.x86_64.rpm" > $HOME/checkinstall_rpmpath.txt)
 
