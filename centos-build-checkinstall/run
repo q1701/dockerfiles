@@ -4,4 +4,4 @@ CONTAINER_NAME="centos-build-checkinstall"
 HOST_VOLUME=$(dirname $(readlink -e $0))/out
 CONTAINER_VOLUME=/mnt/out
 RW_MODE=rw
-docker run -i -t -v $HOST_VOLUME:$CONTAINER_VOLUME:$RW_MODE --name $CONTAINER_NAME $IMAGE_NAME
+docker run -i -t --env="CONTAINER_VOLUME=$CONTAINER_VOLUME" -v $HOST_VOLUME:$CONTAINER_VOLUME:$RW_MODE --name $CONTAINER_NAME $IMAGE_NAME
