@@ -9,7 +9,7 @@ Description
 * Base image : centos:centos6
 * Image : q1701/centos-build-checkinstall
 * Container : centos-build-checkinstall
-* Output directory : ./out
+* Output directory : ./share
 
 Scripts
 -------
