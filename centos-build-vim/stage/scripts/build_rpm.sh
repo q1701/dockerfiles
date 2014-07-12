@@ -13,13 +13,13 @@ yum -y install  $(ls $VOLUME_SHARE_CONTAINER/checkinstall*.rpm | tail -1)
 export HOME=/root
 mkdir -p $HOME/rpmbuild/SOURCES
 
-# Download the original version.
+# Download the original version
 yum -y install mercurial
 hg clone https://vim.googlecode.com/hg/ vim
 cd $BUILD_TMP/vim
 
 # Build
-## Install dependencies to build.
+## Install dependencies to build
 export BUILD_REQUIRES=gcc,gettext,ncurses-devel,lua,lua-devel,perl-ExtUtils-Embed,ruby,ruby-devel,libX11-devel,libXt-devel,gtk2-devel
 yum -y install ${BUILD_REQUIRES//,/ }
 ## Configure
@@ -48,7 +48,7 @@ echo "Vim $VERSION" > description-pak
 checkinstall --type=rpm --pkgname=vim --pkgversion=$VERSION --default --requires=$REQUIRES --autoreqprov=no
 ## Save the full path of the rpm file into a file
 export RPM_PATH="$HOME/rpmbuild/RPMS/$(arch)/vim-$VERSION-1.$(arch).rpm"
-## Install the generated rpm file to test it.
+## Install the generated rpm file to test it
 yum -y localinstall $RPM_PATH
 cd $BUILD_TMP
 
@@ -61,7 +61,7 @@ echo "========================="
 echo "Created: $(basename $RPM_PATH)"
 echo "========================="
 
-# Clean up.
+# Clean up
 cd /
 yum clean all
 rm -rf $BUILD_TMP
