@@ -1,5 +1,5 @@
 #!/bin/sh
-CONTAINER_NAME=${1:-centos-ssh}
+CONTAINER_NAME=${1:-ssh-enabled-centos6}
 CONTAINER_IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' $CONTAINER_NAME)
 if [ -z "$CONTAINER_IP" ]; then
     echo "Error: No ip address found for the container '$CONTAINER_NAME'.";

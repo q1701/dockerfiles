@@ -1,4 +1,4 @@
 #!/bin/sh
-IMAGE_NAME="q1701/centos-ssh"
+IMAGE_NAME="q1701/ssh-enabled-centos6"
 STAGE_DIR="./stage"
 docker build -t $IMAGE_NAME $STAGE_DIR
