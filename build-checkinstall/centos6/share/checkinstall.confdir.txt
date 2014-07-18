@@ -1,2 +1,0 @@
-### [Change the location of configration files to /usr/local/etc.]
-### http://d.hatena.ne.jp/naga_sawa/20120410/1334024586
